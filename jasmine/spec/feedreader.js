@@ -51,7 +51,6 @@ $(function() {
         })
     });
 
-
     /* TODO: Write a new test suite named "The menu" */
     describe('The menu', function() {
 
@@ -90,7 +89,17 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        beforeEach(function(done) {
+            loadFeed(0,function() {
+                done();
+            });
+        })
 
+        it('should be non-empty', function(done) {
+            var feedChildCount = $('.feed').children().length;
+            expect(feedChildCount).toBeGreaterThan(0);
+            done();
+        })
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
@@ -100,6 +109,23 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        var oldFeed;
+        var newFeed;
 
+        beforeEach(function(done) {
+            loadFeed(0,function() {
+                oldFeed = $('.feed').html();
+                done();
+            });
+        })
+
+        it('produces new content', function(done) {
+            loadFeed(1,function() {
+                newFeed = $('.feed').html();
+                expect(oldFeed).not.toBe(newFeed);
+                done();
+            });
+        })
     });
+
 }());
